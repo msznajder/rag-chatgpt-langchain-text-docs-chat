@@ -1,0 +1,3796 @@
+
+
+Hi, everyone.
+
+I'll get started.
+
+OK, so we're now back to
+the second week of CS224N
+
+on Natural Language
+Processing with Deep Learning.
+
+OK, so for today's lecture what
+we're going to be looking at
+
+is all the math details of
+doing neural net learning.
+
+First of all, looking
+at how we can work out
+
+by hand gradients for
+training neural networks,
+
+and then looking
+at how it's done
+
+more algorithmically, which is
+known as the back propagation
+
+algorithm.
+
+And correspondingly,
+by you guys,
+
+well, I hope you remember
+that one minute ago
+
+was when assignment one was due
+and everyone has handed that
+
+in.
+
+If by some chance you
+haven't handed it in,
+
+really should hand it
+in as soon as possible.
+
+Best to preserve those late
+days for the harder assignments.
+
+So I mean, I actually forgot
+to mention we actually
+
+did make one change
+for this year
+
+to make it a bit easier
+when occasionally people
+
+joined the class a week late.
+
+If you want to this
+year in the grading,
+
+assignment one can be
+discounted and we'll just
+
+use your other four assignments.
+
+But if you've been in the class
+so far, for that 98% of people,
+
+well, since assignment one
+is the easiest assignment,
+
+again, it's silly not
+to do it and have it
+
+as part of your grade.
+
+OK, so starting today
+we've put out assignment 2.
+
+And assignment 2 is all
+about making sure you really
+
+understand the math
+of neural networks,
+
+and then the software that
+we use to do that math.
+
+So this is going to be a bit
+of a tough week for some.
+
+So for some people
+who are great on all
+
+their math and
+backgrounds, now feel
+
+like this is stuff they know
+well, nothing very difficult.
+
+But I know there are
+quite a few of you who
+
+this lecture and week is the
+biggest struggle of the course.
+
+We really do want
+people to actually
+
+have an understanding of what
+goes on in neural network
+
+learning rather than viewing
+it as some kind of deep magic.
+
+And I hope that some of
+the material we give today
+
+and that you read up on and use
+in the assignment will really
+
+give you more of a sense of
+what these neural networks are
+
+doing, and how it
+is just math that's
+
+applied in a systematic
+large scale that works out
+
+the answers, and
+that this will be
+
+valuable in giving you a deeper
+sense of what's going on.
+
+But if this material seems
+very scary and difficult,
+
+you can take some
+refuge in the fact
+
+that there's first light
+at the end of the tunnel
+
+since this is really
+the only lecture that's
+
+heavily going through the math
+details of neural networks.
+
+After that, we'll be kind of
+popping back up to a higher
+
+level and by and
+large, after this week
+
+we'll be making use of
+software to do a lot
+
+of the complicated math for us.
+
+But nevertheless, I
+hope this is valuable.
+
+I'll go through
+everything quickly today,
+
+but if this isn't stuff
+that you know backwards,
+
+I really do encourage
+you to work through it
+
+and get help as you need it.
+
+So do come along to
+our office hours.
+
+There are also a number of
+pieces of tutorial material
+
+given in the syllabus.
+
+So there's both
+the lecture notes,
+
+there's some
+materials from CS231.
+
+In the list of readings,
+the very top reading
+
+is some material put together
+by Kevin Clark a couple of years
+
+ago, and actually that
+one's my favorite.
+
+The presentation there
+fairly closely follows
+
+the presentation in
+this lecture of going
+
+through matrix calculus.
+
+So personally, I'd recommend
+starting with that one
+
+but there are four
+different ones
+
+you can choose from if one of
+them seems more helpful to you.
+
+Two other things on
+what's coming up.
+
+Actually for our Thursday's
+lecture, we make a big change.
+
+And Thursday's
+lecture is probably
+
+the most linguistic
+lecture of the whole class
+
+where we go through the
+details of dependency
+
+grammar and dependency parsing.
+
+Some people find that
+tough as well, but at least
+
+it will be tough
+in a different way.
+
+And then one other really good
+opportunity is this Friday,
+
+we have our second
+tutorial at 10:00 AM, which
+
+is an introduction to PyTorch,
+which is the deep learning
+
+framework that we'll be using
+for the rest of the class
+
+once we've gone through
+these first two assignments
+
+where you do things by yourself.
+
+So this is a great chance
+to get an intro to PyTorch,
+
+it will be really useful
+for later in the class.
+
+OK, today's material
+is really all
+
+about sort of the math
+of neural networks,
+
+but just to introduce a setting
+where we can work through this,
+
+I'm going to
+introduce a simple NLP
+
+task and a simple
+form of classifier
+
+that we can use for it.
+
+So the task of named
+entity recognition
+
+is a very common basic NLP task.
+
+And the goal of this is you're
+looking through pieces of text
+
+and you're wanting to label
+by labeling the words which
+
+words belong to entity
+categories like persons,
+
+locations, products,
+dates, times, et cetera.
+
+So for this piece
+of text, last night
+
+Paris Hilton wowed
+in a sequin gown.
+
+Samuel Quinn was arrested
+in the Hilton Hotel in Paris
+
+in April 1989.
+
+The-- some words
+are being labeled
+
+as named entities as shown.
+
+These two sentences
+don't actually
+
+belong together in
+the same article
+
+but I chose those two sentences
+to illustrate the basic point
+
+that it's not that you can
+just do this task by using
+
+a dictionary.
+
+Yes, a dictionary is helpful
+to know that Paris can possibly
+
+be a location, but Paris
+can also be a person name.
+
+So you have to
+use context to get
+
+named entity recognition right.
+
+
+
+OK, well, how might we do
+that with a neural network?
+
+There are much more
+advanced ways of doing this.
+
+But a simple yet
+already pretty good
+
+way of doing named
+entity recognition
+
+with a simple neural
+net is to say, well,
+
+what we're going to do
+is use the word vectors
+
+that we've learned
+about and we're
+
+going to build up a context
+window of word vectors.
+
+And then we're going to put
+those through a neural network
+
+layer and then feed it through
+a softmax classifier of the kind
+
+that we, sorry, I
+said that wrong,
+
+and then we're going to feed it
+through a logistic classifier
+
+of the kind that
+we saw when looking
+
+at negative sampling,
+which is going
+
+to say for a particular
+entity type, such as location,
+
+is that high
+probability location
+
+or is that not a high
+probability location?
+
+So for a sentence like
+the museums in Paris
+
+are amazing to see, what we're
+going to do is for each word,
+
+say we're doing the
+word Paris, we're
+
+going to form a
+window around that,
+
+say a plus or minus
+2 word window.
+
+And so for those
+five words, we're
+
+going to get word
+vectors for them
+
+from the kind of Word2Vec
+or GLoVe word vectors
+
+we've learned.
+
+And we're going to
+make a long vector out
+
+of the concatenation of
+those five word vectors
+
+so the word of interest
+is in the middle.
+
+And then we're going
+to feed this vector
+
+to a classifier
+which is at the end
+
+going to have a probability
+of the word being a location.
+
+And then we could have
+another classifier
+
+that says the probability of
+the word being a person name.
+
+And so once we've
+done that, we're
+
+then going to run it
+at the next position.
+
+So we then say, well, is
+the word "a" a location?
+
+And we'd feed a
+window of five words,
+
+it's then, in Paris
+are amazing to,
+
+and put it through the
+same kind of classifier.
+
+And so this is the
+classifier that we'll use.
+
+So its input will
+be this word window.
+
+So if we have D
+dimensional word vectors,
+
+this will be a 5D vector.
+
+And then we're going to
+put it through a layer
+
+of a neural network.
+
+So the layer of
+the neural network
+
+is going to multiply
+this vector by a matrix,
+
+add on a bias vector,
+and then put that
+
+through a non-linearity such
+as the softmax transformation
+
+that we've seen before.
+
+And that will give
+us a hidden vector
+
+which might be of a smaller
+dimensionality such as this one
+
+here.
+
+And so then with
+that hidden vector,
+
+we're then going to
+take the dot product
+
+of that with an extra
+vector here, here it's u.
+
+So we take u dot product h.
+
+And so when we do that, we're
+getting out a single number.
+
+And that number can
+be any real number.
+
+And so then finally, we're
+going to put that number
+
+through a logistic
+transform of the same kind
+
+that we saw when doing
+negative sampling.
+
+The logistic transform
+will take any real number,
+
+and it'll transform
+it into a probability
+
+that that word is the location.
+
+So its output is the
+predicted probability
+
+of the word belonging
+to a particular class.
+
+And so this could be
+our location classifier
+
+which could classify
+each word in a window
+
+as to what the probability is
+that it's the location word.
+
+And so this little
+neural network
+
+here is the neural network
+I'm going to use today when
+
+going through some of the math.
+
+But actually, I'm going to
+make it even easier on myself.
+
+I'm going to throw away the
+logistic function at the top,
+
+and I'm really
+just going to work
+
+through the math of the
+bottom three-quarters of this.
+
+If you look at Kevin Clark's
+handout that I just mentioned,
+
+he includes when he
+works through it, also
+
+working through the
+logistic function.
+
+And we also saw working through
+a softmax in the first lecture
+
+when I was working through
+some of the Word2Vec model.
+
+OK, so the overall question
+we want to be able to answer
+
+is, so here's our stochastic
+gradient descent equation,
+
+that we have existing
+parameters of our model,
+
+and we want to update them
+based on our current loss, which
+
+is the j of theta.
+
+So for getting our loss
+here, that the true answer
+
+as to whether a word
+is a location or not
+
+will be 1 if it is a location
+or 0 if it isn't, our logistic
+
+classifier will return
+some number like 0.9,
+
+and we'll use the distance
+away from what it should
+
+have been squared as our loss.
+
+So we work out a loss and then
+we're moving a little distance
+
+in the negative of
+the gradient, which
+
+will be changing our parameter
+estimates in such a way
+
+that they reduce the loss.
+
+And so this is
+already being written
+
+in terms of a whole
+vector of parameters,
+
+which is being updated as to
+a new vector of parameters.
+
+But you can also think about it,
+for each individual parameter,
+
+theta J, that we're working
+out the partial derivative
+
+of the loss with respect
+to that parameter.
+
+And then we're
+moving a little bit
+
+in the negative
+direction of that.
+
+That's going to give us a new
+value for parameter theta J.
+
+And we're going to update all
+of the parameters of our model
+
+as we learn.
+
+I mean, in particular,
+in contrast
+
+to what commonly happens
+in statistics, we also--
+
+we update not only the sort
+of parameters of our model
+
+that are sort of weights
+in the classifier,
+
+but we also will update
+our data representation.
+
+So we'll also be changing
+our word vectors as we learn.
+
+OK, so to build
+neural nets, i.e.,
+
+to train neural
+nets based on data,
+
+what we need is to
+be able to compute
+
+this gradient of the parameters
+so that we can then iteratively
+
+update the weights of the
+model and efficiently train
+
+the model that has
+good weights, i.e.
+
+that has high accuracy.
+
+And so how can we do that?
+
+Well, what I'm going
+to talk about today
+
+is, first of all, how
+you can do it by hand.
+
+And so for doing it by
+hand, this is basically
+
+a review of matrix
+calculus, and that will take
+
+quite a bit of the lecture.
+
+And then after we've talked
+about that for a while,
+
+I'll then shift gears and
+introduce the back propagation
+
+algorithm, which is the central
+technology for neural networks.
+
+And that technology
+is essentially
+
+the efficient application
+of calculus on a large scale
+
+as we'll come to
+talking about soon.
+
+So for computing gradients
+by hand, what we're doing
+
+is matrix calculus.
+
+So we're working with
+vectors and matrices
+
+and working out gradients.
+
+And this can seem like
+pretty scary stuff.
+
+And well, to the extent
+that you're kind of scared
+
+and don't know what's
+going on, one choice
+
+is to work out a non-vectorized
+gradient by just working out
+
+what the partial derivative
+is for one parameter at a time
+
+and I showed a little example
+of that in the first lecture.
+
+But it's much, much
+faster and more useful
+
+to actually be able to work
+with vectorized gradients.
+
+And in some sense, if
+you're not very confident,
+
+this is kind of almost
+a leap of faith,
+
+but it really is the case that
+multivariable calculus is just
+
+like single variable
+calculus except you're
+
+using vectors and matrices.
+
+So providing you
+remember some basics
+
+of single variable
+calculus, you really
+
+should be able to do this
+stuff and get it to work out.
+
+Lots of other sources are
+mentioned in the notes.
+
+You can also look at
+the textbook for Math 51
+
+which also has quite a
+lot of material on this.
+
+I know some of you have
+bad memories of Math 51.
+
+OK, so let's go
+through this and see
+
+how it works ramping
+up from the beginning.
+
+So the beginning of calculus
+is, we have a function
+
+with one input and one output.
+
+f(x) equals x cubed.
+
+And so then its gradient
+is its slope, right?
+
+So its derivative.
+
+So its derivative is 3x squared.
+
+And the way to
+think about this is
+
+how much will the output
+change if we change
+
+the input a little bit, right?
+
+So what we're wanting to
+do in our neural net models
+
+is change what they output
+so that they do a better
+
+job of predicting the
+correct answers when we're
+
+doing supervised learning.
+
+And so what we want to
+know is if we fiddle
+
+different parameters of the
+model, how much of an effect
+
+will that have on the output?
+
+Because then we can choose how
+to fiddle them in the right way
+
+to move things down, right?
+
+So when we're saying that the
+derivative here is 3x squared,
+
+well, what we're saying is
+that if you're at x equals 1,
+
+if you fiddle the
+input a little bit,
+
+the output will change 3 times
+as much, 3 times 1 squared,
+
+and it does.
+
+So if I say what's the value
+at 1.01, it's about 1.03.
+
+It's changed three times as
+much, and that's its slope.
+
+But at x equals 4, the
+derivative is 16 times 348.
+
+So if we fiddle
+the input a little,
+
+it will change 48 times
+as much, and that's
+
+roughly what happens,
+4.01 cubed is 64.48.
+
+Now, of course,
+this is just sort
+
+of showing it for a small fiddle
+but that's an approximation
+
+to the actual truth.
+
+Okay, so then we sort of ramp
+up to the more complex cases,
+
+which are more
+reflective of what we
+
+do with neural networks.
+
+So if we have a function
+with one output and n inputs,
+
+then we have a gradient.
+
+So a gradient is a vector
+of partial derivatives
+
+with respect to each input.
+
+So we've got n inputs x1 to
+xn, and we're working out
+
+the partial derivative
+of f with respect
+
+to x1, the partial derivative
+of f with respect to x2,
+
+et cetera, and we then get a
+vector of partial derivatives
+
+where each element
+of this vector
+
+is just like a simple derivative
+with respect to one variable.
+
+OK, so from that
+point, we just keep
+
+on ramping up for what we
+do with neural networks.
+
+So commonly, when
+we have something
+
+like layer in a
+neural network, we'll
+
+have a function
+within n inputs that
+
+will be like our
+word vectors, then
+
+we do something like
+multiply by a matrix,
+
+and then we'll have m outputs.
+
+So we have a function now
+which is taking n inputs
+
+and is producing m outputs.
+
+So at this point, what
+we're calculating for
+
+the gradient is what's
+called a Jacobian matrix.
+
+So for m inputs and n
+outputs, the Jacobian
+
+is an m by n matrix
+of every combination
+
+of partial derivatives.
+
+So function f splits up into
+these different sub functions
+
+f1 through fm, which generate
+each of the m outputs.
+
+And so then we're taking
+the partial derivative of f1
+
+with respect to x1 through
+the partial derivative of f1
+
+with respect to xn,
+then heading down,
+
+we can make it up to the partial
+derivative of fm with respect
+
+to x1, et cetera.
+
+So we have every possible
+partial derivative
+
+of an output
+variable with respect
+
+to one of the input variables.
+
+OK, so in simple calculus,
+when you have a composition
+
+of one variable functions.
+
+So that if you have y equals x
+squared, and then z equals 3y,
+
+that's--
+
+then z is a composition
+of two functions of--
+
+or you're composing
+two functions,
+
+to get z as a function of x.
+
+Then you can work out
+the derivative of z
+
+with respect to x.
+
+And the way you do that
+is with the chain rule.
+
+And so in the chain rule,
+you multiply derivatives.
+
+So dz dx equals
+dz dy times dy dx.
+
+So dz dy is just
+3, and dy dx is 2x.
+
+So we get 3 times 2x so that
+overall, the derivative here
+
+is 6x.
+
+And since if we
+multiply this together,
+
+we're really saying that
+z equals 3x squared.
+
+You should trivially
+be able to see again.
+
+Aha, its derivative is 6x.
+
+So that works.
+
+OK, so once we move into vectors
+and matrices and Jacobians,
+
+it's actually the same game.
+
+So when we're
+working with those,
+
+we can compose functions and
+work out their derivatives
+
+by simply multiplying Jacobians.
+
+So if we start with an
+input x and then put it
+
+through the simplest form
+of neural network layer
+
+and say that z equals Wx plus b.
+
+So we multiply the
+x vector by matrix W
+
+and then add on a bias vector b.
+
+And then typically,
+we put things
+
+through a non-linearity f.
+
+So f could be a
+sigmoid function.
+
+We'll then say h equals f(z).
+
+So this is the composition
+of two functions in terms
+
+of vectors and matrices.
+
+So we can use
+Jacobians and we can
+
+say the partial
+of h with respect
+
+to x is going to be the
+product of the partial h
+
+with respect to z, and the
+partial z with respect to x.
+
+And this all does work out.
+
+So let's start going
+through some examples of how
+
+these things work
+slightly more concretely.
+
+First, just particular
+Jacobians and then
+
+composing them together.
+
+So one case we look at
+is the nonlinearities
+
+that we put a vector
+through, so this
+
+is something like
+putting a vector
+
+through the sigmoid function f.
+
+And so if we have an
+intermediate vector z and we
+
+turn into vector h by putting
+it through a logistic function,
+
+we can say what is dh / dz?.
+
+
+
+Well, for this, formally
+this is a function that
+
+has n inputs and n outputs.
+
+So at the end of the day, we're
+computing an n by n Jacobian.
+
+And so what that's meaning is
+the elements of this n by n
+
+Jacobian are going to take
+the partial derivative
+
+of each output with
+respect to each input.
+
+And well, what is that
+going to be in this case?
+
+Well, in this case,
+because we are actually
+
+just computing element
+wise transformation,
+
+such as a logistic
+transform of each element zi
+
+like the second equation
+here, if i equals j,
+
+we've got something to compute.
+
+Whereas, if i doesn't
+equal J, the input
+
+has no influence on the output
+and so the derivative is 0.
+
+So if i doesn't equal j
+we're going to get a 0,
+
+and if i does equal
+j, well, then we're
+
+going to get the regular
+one variable derivative
+
+of the logistic function,
+which if I remember correctly,
+
+you were asked to compute--
+
+now I can't remember
+whether it's assignment, 1
+
+or assignment 2, but one of the
+two asked you to compute it.
+
+So our Jacobian for this
+case looks like this.
+
+We have a diagonal matrix with
+the derivatives of each element
+
+element along the diagonal
+and everything else is 0.
+
+OK, so let's look at a
+couple of other Jacobians.
+
+So if we are asking, if we've
+got this Wx plus b basic neural
+
+network layer and we're asking
+for the gradient with respect
+
+to x, then what are we
+going to have coming out
+
+is that that's actually
+going to be the matrix W.
+
+So this is where--
+
+what I hope you can do is
+look at the notes at home
+
+and work through this exactly,
+and see that this is actually
+
+the right answer.
+
+But this is the way in which if
+you just have faith and think,
+
+this is just like
+single variable calculus
+
+except I've now got vectors
+and matrices, the answer you
+
+get is actually what
+you expected to get.
+
+Because this is just like
+the derivative of ax plus b
+
+with respect to x where it's a.
+
+So similarly, if we take the
+partial derivative with respect
+
+to b of Wx plus b we get
+out the identity matrix.
+
+OK, then one other Jacobian that
+we mentioned while in the first
+
+lecture while working through
+Word2Vec is if you have the dot
+
+product of two vectors,
+i.e., that's a number,
+
+that what you get
+coming out of it--
+
+so the partial derivative
+of uTh with respect to u
+
+is h transpose.
+
+And at this point,
+there's some fine print
+
+that I'm going to come
+back to in a minute.
+
+So this is the correct
+Jacobian, right?
+
+Because in this case, we have
+the dimension of h inputs
+
+and we have one output, and so
+we want to have a row vector.
+
+But there's a little
+bit more to say on
+
+that that I'll come back
+to in about 20 slides,
+
+but this is the
+correct Jacobian.
+
+OK, so if you are not familiar
+with these kind of Jacobians,
+
+do please look at some of
+the notes that are available
+
+and try and compute these
+in more detail element wise
+
+and convince yourself that
+they really are right.
+
+But I'm going to assume
+these now and show you
+
+what happens when we
+actually then work out
+
+gradients for at least a
+mini little neural net.
+
+
+
+OK, so here is most
+of this neural net.
+
+I mean, as I commented
+that really we'd
+
+be working out the partial
+derivative of the loss
+
+j with respect to these
+variables, but for the example
+
+I'm doing here, I just--
+
+I've locked that off to keep
+it a little simpler and more
+
+manageable for the lecture.
+
+And so we're going
+to just work out
+
+the partial derivative
+of the score s, which
+
+is a real number with respect
+to the different parameters
+
+of this model where the
+parameters of this model
+
+are going to be the W
+and the b and the u,
+
+and also the input because
+we can update the weight
+
+vectors of the word
+vectors of different words
+
+based on tuning them to better
+predict the classification
+
+outputs that we desire.
+
+So let's start off
+with a fairly easy one
+
+where we want to update
+the bias vector b to have
+
+our system classify better.
+
+So to be able to do that,
+what we want to work out
+
+is the partial derivatives
+of s with respect
+
+to b, so we know how to put that
+into our stochastic gradient
+
+update for the b parameters.
+
+OK, so how do we go
+about doing these things?
+
+So the first step is we
+want to sort of break things
+
+up into different functions
+of minimal complexity
+
+that compose together.
+
+So in particular,
+this neural net layer
+
+h equals f of Wx plus b, it's
+still a little bit complex.
+
+So let's decompose
+that one further step.
+
+So we have the input
+x, we then calculate
+
+the linear transformation
+z equals Wx plus b
+
+and then we put things
+through the sort of element
+
+wise non-linearity h
+equals f(z) and then we
+
+do the dot product with u.
+
+And it's useful for
+working these things out
+
+to split into pieces like
+this, have straight what
+
+your different variables
+are, and to know
+
+what the dimensionality of
+each of these variables is.
+
+It's well worth just writing
+out the dimensionality
+
+of every variable
+and making sure
+
+that the answers
+that you're computing
+
+are of the right dimensionality.
+
+So at this point though, what
+we can see is that calculating s
+
+is the product of three--
+
+I'm sorry, it's the composition
+of three functions around x.
+
+So for working out the partials
+of s with respect to b,
+
+it's the composition
+of the three
+
+functions shown on the left.
+
+And so therefore, the gradient
+of x with respect to b we're
+
+going to take the
+product of these three
+
+partial derivatives.
+
+OK, so how do-- what do we--
+
+so we've got the s equals uTh.
+
+So that's sort of the
+top corresponding partial
+
+derivative, partial
+derivative h with respect
+
+to z, partial derivative
+of z with respect
+
+to b, which is the first
+one that we're working out.
+
+OK, so we want to work this out.
+
+And if we're lucky, we
+remember those Jacobians
+
+I showed previously about
+the Jacobian for a vector dot
+
+product, the Jacobian
+for the non-linearity
+
+and the Jacobian for the
+simple linear transformation.
+
+And so we can use those.
+
+So for the partials of s
+with respect to h, well,
+
+that's going to be uT
+using the first one.
+
+The partials of h
+with respect to z, OK,
+
+so that's the
+non-linearity, and so that's
+
+going to be the matrix
+that's the diagonal matrix
+
+with the element-wise derivative
+f prime of z and 0 elsewhere.
+
+And then for the Wx
+plus b, when we're
+
+taking the partials with respect
+to b, that's just the identity
+
+matrix.
+
+So we can simplify
+that down a little,
+
+the identity matrix disappears
+and since uT is a vector
+
+and this is a
+diagonal matrix, we
+
+can rewrite this as uT Hadamard
+product of f prime of z.
+
+I think this is
+the first time I've
+
+used this little circle
+for Hadamard product
+
+but it's something
+that you'll see
+
+quite a bit in neural network
+work since it's often used.
+
+So when we have two vectors uT
+and this vector here, sometimes
+
+you want to do an
+element wise product.
+
+So the output of
+this will be a vector
+
+where you've taken the
+first element of each
+
+and multiplied them, the
+second element of each
+
+and multiplied them,
+et cetera downwards.
+
+And so that's called
+the Hadamard product
+
+and that's what
+we're calculating
+
+as to calculate a vector,
+which is the gradient of s
+
+with respect to b.
+
+OK, so that's good.
+
+So we now have a gradient
+of s with respect
+
+to b and we could use that
+in our stochastic gradient.
+
+But we don't stop
+there, we also want
+
+to work out the
+gradient with respect
+
+to others of our parameters.
+
+So we might want to next go on
+and work out the gradients of s
+
+with respect to w.
+
+Well, we can use the chain rule
+just like we did before, right?
+
+So we've got the same product
+of functions and everything
+
+is going to be the
+same apart from me now
+
+taking the derivatives with
+respect to w rather than b.
+
+So it's now going to be the
+partial of s with respect to h,
+
+h with respect to z,
+and z with respect to w.
+
+And the important thing to
+notice here and this leads
+
+into what we do with the
+back propagation algorithm
+
+is wait a minute, this is very
+similar to what we've already
+
+done.
+
+So when we are working
+out the gradients of s
+
+with respect to b, the first
+two terms were exactly the same,
+
+it's only the last
+one that differs.
+
+So to be able to
+build or to train
+
+neural networks
+efficiently, this
+
+is what happens all the time
+and it's absolutely essential
+
+that we use an algorithm that
+avoids repeated computation.
+
+And so the idea we're
+going to develop
+
+is when we have
+this equation stack
+
+that this sort of stuff that's
+above where we compute z,
+
+and we're going to be sort of,
+that'll be the same each time
+
+and we want to compute something
+from that that we can then
+
+sort of feed downwards
+when working out
+
+the gradients with
+respect to Wx or b.
+
+And so we do that
+by defining delta,
+
+which is delta is the
+partials composed that
+
+are above the linear transform.
+
+And that's referred
+to as the local error
+
+signal, that's
+what's being passed
+
+in from above to the
+linear transform.
+
+And we've already computed
+the gradient of that
+
+in the preceding slides.
+
+And so the final form of the
+partial with respect to b
+
+will be delta times
+the remaining part.
+
+And well, we've seen
+that for partial of s
+
+with respect to b,
+the partial of z
+
+with respect to b is
+just the identity,
+
+so the end result was delta.
+
+But in this time,
+we're then going
+
+to have to work out the
+partial of z with respect
+
+to w and multiply that by delta.
+
+So that's the part that
+we still haven't yet done.
+
+So and this is where things
+get in some sense, a little bit
+
+hairier, and so
+there's something
+
+that's important to explain.
+
+So what should we have for
+the Jacobian of ds / dW?
+
+Well, that's a function
+that has one output,
+
+the output is just a
+score of real number,
+
+and then it has n by m inputs.
+
+So that Jacobian is a 1
+by n by m matrix, i.e.
+
+a very long low vector
+but that's correct math.
+
+But it turns out
+that that's kind of
+
+bad for our neural networks.
+
+Because remember, what we want
+to do with our neural networks
+
+is do stochastic
+gradient descent.
+
+And we want to say theta
+new equals theta old
+
+minus a small multiplier
+times the gradient.
+
+And well, actually the W
+matrix is an n by m matrix,
+
+and so we couldn't
+actually do the subtraction
+
+if this gradient we calculate
+is just a huge row vector.
+
+We'd like to have it as the
+same shape as the W matrix.
+
+In neural network
+land when we do this,
+
+we depart from pure
+math at this point
+
+and we use what we call
+the shape convention.
+
+So what we're going
+to say is and you're
+
+meant to use this for
+answers in the assignment,
+
+that the shape of
+the gradient we're
+
+always going to make to be
+the shape of the parameters.
+
+And so therefore,
+ds / dW, we are also
+
+going to represent as an
+n by m matrix just like W,
+
+and we're going to reshape
+the Jacobian to place it
+
+into this matrix shape.
+
+OK, so if we want to place it
+into this matrix shape, what
+
+are we going to want
+to get for ds / dW?
+
+Well, we know that it's
+going to involve delta,
+
+our local error signal and
+then we have to work out
+
+something for dz / dW.
+
+
+
+Well, since z equals
+Wx plus b, you'd
+
+kind of expect that
+the answer should be x.
+
+And that's right.
+
+So the answer to
+ds / dW is going
+
+to be delta transpose
+times x transpose.
+
+And so the form that we're
+getting for this derivative is
+
+going to be the product of
+the local error signal that
+
+comes from above versus what we
+calculate from the local input
+
+x.
+
+So that shouldn't yet be
+obvious why that is true.
+
+So let me just go through
+in a bit more detail
+
+why that's true.
+
+So when we want to
+work out the ds / dW,
+
+right, it's sort
+of delta times dz /
+
+dW where that's computing
+for z is Wx plus b.
+
+So let's just
+consider for a moment
+
+what the derivative
+is with respect
+
+to a single weight, Wij.
+
+So Wij might be W23 that's shown
+in my little neural network
+
+here.
+
+And so the first thing to
+notice is that Wij only
+
+contributes to zi, so
+it's going into to z2,
+
+which then computes h2 and it
+has no effect whatsoever on h1.
+
+OK, so when we're
+working out dzi,
+
+dWij, it's going to be
+dWix that sort of row,
+
+that row of the matrix plus
+bi, which means that for--
+
+we've got a kind of a
+sum of Wik times xk.
+
+And then for this sum, this
+is like one variable calculus
+
+that when we're taking the
+derivative of this with respect
+
+to Wij, every term in
+the sum is going to be 0,
+
+the derivative is going to
+be 0 except for the one that
+
+involves Wij.
+
+And then the derivative
+of that is just
+
+like ax with respect
+to a, it's going
+
+to be x so you get
+xj out as the answer.
+
+And so the end result of that
+is that when we're working out
+
+what we want as the
+answer is that we're
+
+going to get these columns
+where x1 is all that's left,
+
+x2 is all that's left through
+xm is all that's left.
+
+And then that's multiplied by
+the vectors of the local error
+
+signal from above.
+
+And what we want to compute is
+this outer product matrix where
+
+we're getting the different
+combinations of the delta
+
+and the x.
+
+And so we can get
+the n by m matrix
+
+that we'd like to have
+via our shape convention
+
+by taking delta transpose,
+which is n by 1 times
+
+x transpose, which
+is n1 by m and then
+
+we get this out
+of product matrix.
+
+So like that's the kind of a
+hacky argument that I've made.
+
+It's certainly a
+way of doing things
+
+that the dimensions work out
+and it sort of makes sense,
+
+there's a more detailed
+run through this that
+
+appears on the lecture notes.
+
+And I encourage
+you to sort of also
+
+look at the more
+mathy version of that.
+
+Here's a little bit
+more information
+
+about the shape convention.
+
+So well, first of
+all one more example
+
+of this, so when you're working
+ds / db that comes out as--
+
+its Jacobian is a row vector.
+
+But similarly, you know
+according to the shape
+
+convention we want our gradient
+to be the same shape as b and b
+
+is column vector, so
+that's sort of again,
+
+they're different shapes and
+you have to transpose one
+
+to get the other.
+
+And so effectively, what
+we have is a disagreement
+
+between the Jacobian form.
+
+So the Jacobian form makes
+sense for calculus and math.
+
+Because if you want to have
+that like I claimed, that matrix
+
+calculus is just like
+single variable calculus
+
+apart from using
+vectors and matrices,
+
+you can just multiply
+together the parftials,
+
+that only works out if
+you're using Jacobians.
+
+But on the other
+hand, if you want
+
+to do stochastic
+gradient descent
+
+and be able to sort of subtract
+off a piece of the gradient,
+
+that only works if you
+have the same shape
+
+matrix for the gradient as you
+do for the original matrix.
+
+And so this is a bit confusing,
+but that's just the reality,
+
+there are both of
+these two things.
+
+So the Jacobian form is
+useful in doing the calculus.
+
+But for the answers
+in the assignment,
+
+we want the answers to be
+presented using the shape
+
+convention so that
+the gradient is shown
+
+in the same shape
+as the parameters
+
+and therefore, you'll
+be able to-- it's
+
+the right shape for doing
+a gradient update by just
+
+subtracting a small
+amount of the gradient.
+
+So for working through things
+there are then basically
+
+two choices.
+
+One choice is to work through
+all the math using Jacobians
+
+and then right at the end, to
+reshape following the shape
+
+convention to give the answer.
+
+So that's what I did
+when I worked out ds/ db.
+
+We worked through
+it using Jacobians,
+
+we got an answer but it
+turned out to be a row vector,
+
+and so well then we
+have to transpose that
+
+at the end to get into the right
+shape for the shape convention.
+
+The alternative is to always
+follow the shape convention.
+
+And that's kind of what I did
+when I was then working out
+
+ds / dW, I didn't
+fully use Jacobians.
+
+I said, Oh, well, when we work
+out whatever it was, dz / dW,
+
+let's work out what
+shape we want it to be
+
+and what to fill
+in the cells with.
+
+And if you're sort of
+trying to do it immediately
+
+with the shape convention,
+it's a little bit more hacky
+
+in a way, since
+you know you have
+
+to look at the dimensions
+for what you want and figure
+
+out when to transpose
+or to reshape the matrix
+
+to be at the right shape.
+
+But the kind of informal
+reasoning that I gave
+
+is what you do and what works.
+
+And one way, and there are
+sort of hints that you can use,
+
+right, that you know that
+your gradient should always
+
+be the same shape
+as your parameters
+
+and you know that the
+error message coming in
+
+will always have the
+same dimensionality
+
+as that hidden layer, and
+you can work it out always
+
+following the shape convention.
+
+
+
+OK, so that is hey, doing
+this is all matrix calculus.
+
+So after pausing for
+breath for a second,
+
+the rest of the
+lecture is then OK.
+
+Let's look at how our software
+trains neural networks using
+
+what's referred to as the
+backpropagation algorithm.
+
+
+
+So the short answer is
+basically we've already done it.
+
+The rest of the lecture is easy.
+
+So essentially, I've just shown
+you what the backpropagation
+
+algorithm does.
+
+So the backpropagation
+algorithm is
+
+judiciously taking and
+propagating derivatives
+
+using the matrix chain rule.
+
+The rest of the back
+propagation algorithm
+
+is to say, OK, when we
+have these neural networks,
+
+we have a lot of shared
+structure and shared
+
+derivatives.
+
+So what we want
+to do is maximally
+
+efficiently re-use
+derivatives of higher layers
+
+when we're computing
+derivatives for lower layers
+
+so that we minimize computation.
+
+And I already pointed
+that out in the first half
+
+but we want to
+systematically exploit that.
+
+And so the way we do that
+in our computational systems
+
+is they construct
+computation graphs.
+
+So this maybe looks a
+little bit like what
+
+you saw in a compilers
+class if you did one, right,
+
+that you're creating--
+
+I call it here computation graph
+but it's really a tree, right?
+
+So you're creating here
+this tree of computations
+
+in this case but in
+a more general case
+
+it's some kind of directed
+graph of computations which has
+
+source nodes, which are inputs.
+
+Either inputs like x or
+input parameters like W
+
+and b and its interior
+nodes are operations.
+
+And so then once we've
+constructed a graph,
+
+and so this graph corresponds
+to exactly the example
+
+I did before, right?
+
+That this was our little neural
+net that's in the top right
+
+and here's the corresponding
+computation graph of computing
+
+Wx plus b put it through
+the sigmoid non-linearity f
+
+multiply the resulting dot
+product with the resulting
+
+vector with u, gives
+us our output score s.
+
+OK, so what we do
+to compute this
+
+is we pass along the edges
+the results of operations.
+
+So this is Wx then z then
+h and then our output is s.
+
+And so the first
+thing we want to be
+
+able to do to compute
+with neural networks
+
+is to be able to compute
+four different inputs, what
+
+the output is.
+
+And so that's referred to
+as forward propagation.
+
+And so we simply run
+this expression much
+
+like you standardly
+do in a compiler
+
+to compute the value
+of s and that's
+
+the forward propagation phase.
+
+But the essential additional
+element of neural networks
+
+is that we then also want
+to be able to send back
+
+gradients which will
+tell us how to update
+
+the parameters of the model.
+
+And so it's this ability to send
+back gradients which gives us
+
+the ability for these models
+to learn once we have a loss
+
+function at the
+end, we can work out
+
+how to change the
+parameters of the model
+
+so that they more accurately
+produce the desired output,
+
+i.e. they minimize the loss.
+
+And so it's doing that part that
+then is called backpropagation.
+
+So we then-- once we
+forward propagated a value
+
+with our current
+parameters, we then
+
+head backwards reversing
+the direction of the arrows
+
+and pass along gradients down
+to the different parameters
+
+like b, and W, and
+u that we can use
+
+to change using stochastic
+gradient descent what
+
+the value of b is and
+what the value of W is.
+
+So we start off with ds
+/ ds, which is just 1,
+
+and then we run
+our backpropagation
+
+and we're using the sort
+of same kind of composition
+
+of Jacobian.
+
+So we have ds / dh
+here and ds / dz
+
+and we progressively pass
+back those gradients.
+
+So we just need to work out how
+to efficiently and cleanly do
+
+this in a computational system.
+
+And so let's sort of
+work through again a few
+
+of these cases.
+
+So the general situation is
+we have a particular node,
+
+so a node is where some kind of
+operation like multiplication
+
+or a non-linearity happens.
+
+And so the simplest
+case is that we've
+
+got one output and one input.
+
+So we'll do that first.
+
+So that's like h equals f of z.
+
+So what we have is an
+upstream gradient ds / dh
+
+and what we want to do is
+compute the downstream gradient
+
+of ds / dz.
+
+And the way we're going
+to do that is say,
+
+well for this function
+f it's a function,
+
+it's got a derivative
+for a gradient.
+
+So what we want to do is work
+out that local gradient dh /
+
+dz, and then that gives us
+everything that we need to work
+
+out ds/ dz because that's
+precisely we're going to use
+
+the chain rule.
+
+We're going to say that ds / dz
+equals the product of ds / dh
+
+times dh / dz where this
+is, again, using Jacobians.
+
+OK, so the general principle
+that we're going to use
+
+is the downstream gradient
+equals the upstream gradient
+
+times the local gradient.
+
+OK, sometimes it gets a
+little bit more complicated.
+
+So we might have multiple
+inputs to a function.
+
+So this is the matrix vector
+multiply, so z equals Wx.
+
+OK, when there are
+multiple inputs,
+
+we still have an upstream
+gradient ds / dz,
+
+but what we're going to do
+is work out a local gradient
+
+with respect to each input.
+
+So we have dz / dw and dz / dx.
+
+And so then at that point,
+it's exactly the same
+
+for each piece of it.
+
+We're going to work out the
+downstream gradients ds / dW
+
+and ds / dx by using the
+chain rule with respect
+
+to the particular
+local gradient.
+
+So let's go through
+an example of this.
+
+I mean, this is kind
+of a silly example,
+
+it's not really an example that
+looks like a typical neural net
+
+but it's sort of a
+simple example where
+
+we can show some of the
+components of what we do.
+
+So what we're going
+to do is we're
+
+going to calculate
+f of xyz, which
+
+is being calculated as x plus
+y times the max of y and z.
+
+And we've got particular
+values that we're
+
+starting off with x equals 1,
+y equals 2, and z equals 0.
+
+So these are the current
+values of our parameters.
+
+And so we can say,
+OK, well, we want
+
+to build an expression
+tree for that.
+
+Here's our expression tree.
+
+We're taking x plus y, we're
+taking the max of y and z,
+
+and then we're multiplying them.
+
+And so our forward propagation
+phase is just to run this.
+
+So we take the values
+of our parameters
+
+and we simply start to
+compute with them, right?
+
+So we have 1, 2, 2, 0
+and we add them as 3,
+
+the max is 2 we multiply
+them and that gives us 6.
+
+
+
+OK, so then at
+that point, we then
+
+want to go and work out how to
+do things for back propagation
+
+and how these back
+propagation steps work.
+
+And so the first
+part of that is sort
+
+of working out what our local
+gradients are going to be.
+
+
+
+So this is a here
+and this is x and y.
+
+So da / dx since a equals x
+plus y is just going to be 1.
+
+And da / dy is
+also going to be 1.
+
+Then for b equals the max of
+yz, so this is this max node,
+
+So the local gradients for that
+is it's going to depend on y--
+
+where the y is greater than z.
+
+So db / dy is going
+to be 1 if and only
+
+if y is greater than z, which
+it is at our particular point
+
+here.
+
+So that's 1.
+
+And dbdz is going to be 1
+only if z is greater than y.
+
+So for our particular values
+here that one is going to be 0.
+
+And then finally here
+we are calculating
+
+the product f equals ab.
+
+So for that, we're going to--
+
+wait, sorry, that slide
+is a little imperfect.
+
+OK, so for the product, the
+derivative f with respect to a
+
+is equal to b, which is
+2, and the derivative
+
+of f with respect
+to b is a equals 3.
+
+So that gives us all of the
+local gradients at each node.
+
+And so then to run
+back propagation,
+
+we start with df /
+df, which is just 1,
+
+and then we're going to work
+out that the downstream equals
+
+the upstream times the local.
+
+OK, so the local--
+
+so when you have a
+product like this,
+
+note that sort of
+the gradients flip.
+
+So we take upstream times
+the local, which is 2, oops.
+
+
+
+So the downstream is 2,
+on this side df / db is 3.
+
+So we're taking upstream
+times local, that gives us 3,
+
+and so that gives us--
+
+that propagates values to
+the plus and max nodes.
+
+And so then we continue along.
+
+So for the max node, the local
+gradient db / dy equals 1.
+
+So we're going to
+take upstream is 3,
+
+so it only takes 3 times
+1 and that gives us 3.
+
+db / dz is 0 because of the fact
+that z value is not the max.
+
+So we're taking 3 times 0 and
+saying the gradient there is 0.
+
+So finally, during
+the plus node,
+
+the local gradients for
+both x and y there are 1.
+
+So we're just getting
+2 times 1 in both cases
+
+and we're saying that the
+gradients there are 2.
+
+OK, and so again at
+the end of the day,
+
+the interpretation here is that
+this is giving us information
+
+as to if we wiggle the
+values of x, y, and z,
+
+how much of a difference
+does it make to the output?
+
+What is the slope, the gradient
+with respect to the variable?
+
+So what we've seen is that since
+z isn't the max of y and z,
+
+if I change the value of z a
+little, like I make the z 0.1
+
+or minus 0.1, it
+makes no difference
+
+at all to what I
+compute as the output.
+
+So therefore, the
+gradient there is 0.
+
+If I change the
+value of x a little,
+
+then that is going
+to have an effect.
+
+And it's going to affect
+the output by twice as much
+
+as the amount I change it.
+
+
+
+Right, so and that's because
+the df / dz equals 2.
+
+So interestingly, so I mean we
+can basically work that out.
+
+So if we imagine
+making sort of x 2.1,
+
+well, then what we'd
+calculate the max is 2--
+
+I'm so sorry, if we make x 1.1,
+we then get the max here is 2,
+
+and we get 1.1 plus 2 is
+3.1, so we get 3.1 times
+
+2 so they'd be about 6.2.
+
+So changing x by 0.1 has
+added 0.2 to the value of f.
+
+Conversely, for the value of
+y, we find that df dy equals 5.
+
+So, what we do when we've got
+two things coming out here,
+
+as I'll go through
+again in a moment,
+
+is we're summing the gradient.
+
+So, again, 3 plus 2 equals 5.
+
+And empirically
+that's what happens.
+
+So, if we consider fiddling
+the value of y a little,
+
+let's say we make
+it a value of 2.1,
+
+then the prediction is
+they'll have 5 times
+
+as big an effect on the
+output value that we compute.
+
+And, well, what do we compute?
+
+So, we compute 1 plus 2.1.
+
+So that's 3.1.
+
+Then we compute the max
+of 2.1 and 0, is 2.1.
+
+So we'll take the
+product of 2.1 and 3.1.
+
+And I calculate that in
+advance, since I can't really
+
+do this arithmetic in my head.
+
+And the product of
+those two is 6.51.
+
+So it has gone up about by 0.5.
+
+So we've multiplied by
+fiddling it by 0.1, by 5 times
+
+to work out the magnitude
+of the effect on the output.
+
+OK.
+
+So for this--
+
+Before I did the case of when
+we had one in and one out here,
+
+and multiple ins
+and one out here.
+
+The case that I hadn't
+actually dealt with
+
+is the case of when you have
+multiple outward branches, that
+
+then turned up in
+the computation of y.
+
+So, once you have multiple
+outward branches, what
+
+you're doing is you're summing.
+
+So that when you want
+to work out the df dy,
+
+you've got a local
+gradient, you've
+
+got two upstream
+gradients, and you're
+
+working it out with
+respect to each of them
+
+as in the chain rule.
+
+And then you're
+summing them together
+
+to work out the
+impact at the end.
+
+
+
+So, we also saw some of the
+other node intuitions, which
+
+it's useful to have doing this.
+
+So when you have
+an addition, that
+
+distributes the
+upstream gradient
+
+to each of the things below it.
+
+When you have max, it's
+like a routing node.
+
+So when you have max, you
+have the upstream gradient
+
+and it goes to one of
+the branches below it,
+
+and the rest of them
+get no gradient.
+
+
+
+When you then have
+a multiplication,
+
+it has this effect of
+switching the gradient.
+
+So, if you're taking 3 by 2,
+the gradient on the 2 side
+
+is 3 and on the 3 side is 2.
+
+And if you think about it in
+terms of how much effect you
+
+get from when you're doing this
+sort of wiggling, that totally
+
+makes sense, right?
+
+Because if you're multiplying
+another number by 3,
+
+then any change here is
+going to be multiplied by 3,
+
+and vice versa.
+
+
+
+OK.
+
+So, this is the kind
+of computation graph
+
+that we want to use to work
+out derivatives in an automated
+
+computational fashion,
+which is the basis
+
+of the back
+propagation algorithm.
+
+But at that point, this
+is what we're doing,
+
+but there's still one
+mistake that we can make.
+
+It would be wrong for us to sort
+of say, OK, well, first of all,
+
+we want to work out ds / db.
+
+So, look, we can start up here.
+
+We can propagate
+our upstream errors,
+
+work out local gradients.
+
+Upstream our local gradient
+and keep all the way down,
+
+and get the ds / db down here.
+
+OK.
+
+Next we want to
+do it for ds / dw.
+
+Let's just run it
+all over again.
+
+Because if we did that, we'd
+be doing repeated computation,
+
+as I showed in the first half.
+
+That this term is
+the same both times.
+
+This term is the
+same both times.
+
+This term is the
+same both times.
+
+That only the bits
+at the end differ.
+
+So, what we want to do is
+avoid duplicated computation
+
+and compute all the
+gradients that we're
+
+going to need successively,
+so that we only do them once.
+
+And so that was
+analogous to when
+
+I introduced this delta variable
+when we computed gradients
+
+by hand.
+
+So, starting off here from--
+
+
+
+Starting off here
+with ds / ds is 1.
+
+We then want to one time compute
+gradient in the green here.
+
+One time compute the
+gradient in green here.
+
+That's all common work.
+
+Then we're going to take the
+local gradient for dz / db
+
+and multiply that by
+the upstream gradient
+
+to have worked out ds / db.
+
+And then we're going to take
+the same upstream gradient,
+
+and then work out the
+local gradient here.
+
+And then sort of propagate
+that down to give us ds / dw.
+
+So, the end result is, we
+want to sort of systematically
+
+work to forward
+computation forward
+
+in the graph, and
+backward computation,
+
+back propagation backward
+in the graph in a way
+
+that we do things efficiently.
+
+So this is the general
+form of the algorithm,
+
+which works for an
+arbitrary computation graph.
+
+So, at the end of the day, we've
+got a single scalar output, z.
+
+And then we have inputs and
+parameters, which compute z.
+
+And so once we have
+this computation graph--
+
+And I added in this
+funky extra arrow
+
+here to make it a more
+general computation graph.
+
+Well, we can always say
+that we can work out
+
+a starting point, something
+that doesn't depend on anything.
+
+So in this case, both of
+these bottom two nodes
+
+don't depend on anything else.
+
+So we can start
+with them, and we
+
+can start to compute forward.
+
+We can compute values for
+all of these second row
+
+from the bottom nodes.
+
+And then we're able to
+compute the third ones up.
+
+So, we can have a
+topological sort
+
+of the nodes based
+on the dependencies
+
+in this directed graph.
+
+And we can compute the
+value of each node,
+
+given some subset
+of its predecessors
+
+which it depends on.
+
+And so doing that is referred
+to as the forward propagation
+
+phase, and gives us a
+computation of the scalar
+
+output, z, using our
+current parameters
+
+and our current inputs.
+
+And so then after that,
+we run back propagation.
+
+So for back propagation, we
+initialize the output gradient,
+
+dz / dz, as 1.
+
+And then we visit nodes
+in the reverse order
+
+of the topological sort, and we
+compute the gradients downward.
+
+And so our recipe is that for
+each node as we head down,
+
+we're going to
+compute the gradient
+
+of the node with respect to
+its successors the things
+
+that it feeds into.
+
+And how we compute that gradient
+is using this chain rule
+
+that we've looked at.
+
+So this is sort of the
+generalized form of the chain
+
+rule where we have
+multiple outputs.
+
+And so we're summing over
+the different outputs.
+
+And then for each
+output, we're computing
+
+the product of the
+upstream gradient
+
+and the local gradient
+with respect to that node.
+
+And so we head downwards.
+
+And we continue down the
+reverse topological sort order,
+
+and we work out the
+gradient with respect
+
+to each variable in this graph.
+
+And so it hopefully
+looks kind of intuitive
+
+looking at this picture.
+
+
+
+If you think of it like
+this, the big O complexity
+
+of forward propagation
+and backward propagation
+
+is the same, right?
+
+In both cases, you're
+doing a linear path
+
+through all of these
+nodes and calculating
+
+values given predecessors, and
+then values given successors.
+
+I mean, you have to do a little
+bit more work for working out
+
+the gradients sort of as
+shown by this chain rule,
+
+but it's the same
+big O complexity.
+
+So, if somehow you're
+implementing stuff for yourself
+
+rather than relying
+on the software,
+
+and you're calculating the
+gradients of a different order
+
+of complexity of
+forward propagation,
+
+it means that you're
+doing something wrong.
+
+You're doing repeated work
+that you shouldn't have to do.
+
+OK.
+
+So, this algorithm works
+for a completely arbitrary
+
+computation graph.
+
+Any directed acyclic graph
+you can apply this algorithm.
+
+In general, what we find is that
+we build neural networks that
+
+have a regular layer structure.
+
+So we have things like
+a vector of inputs,
+
+and then that's
+multiplied by a matrix.
+
+It's transformed into
+another vector, which
+
+might be multiplied
+by another matrix,
+
+or summed with another
+matrix or something, right?
+
+So, once we're using that kind
+of regular layer structure,
+
+we can then parallelize
+the computation
+
+by working out the gradients in
+terms of Jacobians of vectors
+
+and matrices, and do things in
+parallel much more efficiently.
+
+OK.
+
+So, doing this is then
+referred to as automatic
+
+differentiation.
+
+And so, essentially, if you
+know the computation graph,
+
+you should be able to have
+your clever computer system
+
+work out what the
+derivatives of everything is,
+
+and then apply back
+propagation to work out
+
+how to update the
+parameters and learn.
+
+And there's actually a
+sort of an interesting sort
+
+of thing of how history has gone
+backwards here, which I'll just
+
+note.
+
+So, some of you
+might be familiar
+
+with symbolic
+computation packages,
+
+so those are things
+like Mathematica.
+
+So Mathematica, you can
+give it a symbolic form
+
+of a computation, and
+then it can work out
+
+derivatives for you.
+
+So it should be the
+case that if you
+
+give a complete symbolic form
+of a computation graph, then
+
+it should be able to work out
+all the derivatives for you.
+
+And you never have to work out a
+derivative by hand, whatsoever.
+
+And that was actually attempted
+in a famous deep learning
+
+library called
+Theano, which came out
+
+of Yoshua Bengio's group at
+the University of Montreal.
+
+That it had a compiler
+that did that kind
+
+of symbolic manipulation.
+
+But somehow, that
+proved a little bit
+
+too hard a road to follow.
+
+I imagine that it actually might
+come back again in the future.
+
+And so, for modern deep
+learning frameworks,
+
+which includes both
+TensorFlow, or PyTorch,
+
+they do 90% of this computation
+of automatic differentiation
+
+for you, but they don't
+actually symbolically compute
+
+derivatives.
+
+So, for each particular node
+or layer of your deep learning
+
+system, somebody,
+either you or the person
+
+who wrote that layer,
+has handwritten
+
+the local derivatives.
+
+But then everything
+from that point on,
+
+the sort of the taking,
+doing the chain rule
+
+of combining upstream
+gradients with local gradients
+
+to work out downstream
+gradients, that's then
+
+all been done automatically
+for back propagation
+
+on the computation graph.
+
+And so what that means is,
+for a whole neural network,
+
+you have a computation
+graph, and it's
+
+going to have a forward
+pass and a backward pass.
+
+And so for the
+forward pass, you're
+
+topologically sorting the nodes
+based on their dependencies
+
+in the computation graph.
+
+And then for each node,
+you're running forward
+
+the forward computation
+on that node.
+
+And then for
+backward propagation,
+
+you're reversing the
+topological sort of the graph.
+
+And then for each
+node in the graph,
+
+you're running the
+backward propagation,
+
+which is the little bit
+of back prop, the chain
+
+rule at that node.
+
+And then the result
+of doing that is you
+
+have gradients for your
+inputs and parameters.
+
+And so, this is--
+
+The overall software
+runs this for you.
+
+And so what you want
+to do is then actually
+
+have stuff for particular
+nodes or layers in the graph.
+
+So, if I have a
+multiply gate, it's
+
+going to have a forward
+algorithm, which
+
+just computes that the
+output is x times y
+
+in terms of the two inputs.
+
+And then I'm going to
+want to tell it also
+
+how to calculate the
+local derivative.
+
+So I want to say, what
+is the local derivative.
+
+So, dl / dx and dl / dy in
+terms of the upstream gradient,
+
+dl / dz.
+
+And so, I will then manually
+work out how to calculate that.
+
+And normally what
+I have to do is,
+
+I assume the forward
+pass is being run first.
+
+And I'm going to shove into some
+local variables for my class
+
+the values that we used in
+the forward computation.
+
+So as well as computing
+z equals x times y,
+
+I'm going to sort of
+remember what x and y were.
+
+So that then when I'm asked
+to compute the backward pass,
+
+I'm then going to
+have implemented here
+
+what we saw earlier of--
+
+That when it's xy, you're going
+to sort of swap the y and the x
+
+to work out the local gradients.
+
+And so then I'm going
+to multiply those
+
+by the upstream gradient.
+
+And I'm going to return--
+
+I've just written it here
+as a sort of a little list,
+
+but really it's going to be a
+NumPy vector of the gradients.
+
+OK.
+
+So that's 98% of what I
+wanted to cover today.
+
+Just a couple of
+quick comments left.
+
+So, that can and should
+all be automated.
+
+Sometimes you want to
+just check if you're
+
+computing the right gradients.
+
+And so the standard
+way of checking
+
+that you're computing
+the right gradients
+
+is to manually work
+out the gradient
+
+by doing a numeric
+calculation of the gradient.
+
+And so, you can do that--
+
+So you can work out what the
+derivative of f with respect
+
+to x should be, by choosing
+some sort of small number,
+
+like 10 to the minus 4, adding
+it to x, subtracting it from x.
+
+And then so the difference
+between these numbers is 2h.
+
+Dividing it through by 2h.
+
+And you're simply
+working out the rise
+
+over the run, which is the
+slope at that point with respect
+
+to x.
+
+And that's an approximation of
+the gradient of f with respect
+
+to x at that value of x.
+
+So, this is so simple.
+
+You can't make a
+mistake implementing it.
+
+And so therefore,
+you can use this
+
+to check whether your gradient
+values are correct or not.
+
+This isn't something that
+you'd want to use much.
+
+Because not only
+is it approximate,
+
+but it's extremely slow.
+
+Because to work
+this out, you have
+
+to run the forward computation
+for every parameter
+
+of the model.
+
+So, if you have a model
+with a million parameters,
+
+you're now doing a
+million times as much work
+
+to run back prop as you
+would do if you're actually
+
+using calculus.
+
+So, calculus is a
+good thing to know.
+
+But it can be really useful to
+check that the right values are
+
+being calculated.
+
+In the old days when we
+handwrote everything,
+
+this was kind of
+the key unit test
+
+that people used everywhere.
+
+These days, most
+of the time you're
+
+reusing layers that
+are built into PyTorch,
+
+or some other deep
+learning framework.
+
+So it's much less needed.
+
+But sometimes you're
+implementing your own layer,
+
+and you really do want
+to check that things
+
+are implemented correctly.
+
+There's a fine point in
+the way this is written.
+
+If you saw this sort of in
+high school calculus class,
+
+you will have seen rise
+over run of f(x) plus h
+
+minus f(x) divided by h.
+
+It turns out that doing this
+two sided estimate like this,
+
+is much, much more accurate
+than doing a one sided estimate.
+
+And so you're really
+much encouraged to use
+
+this approximation.
+
+OK.
+
+So at that point, we've
+mastered the core technology
+
+of neural nets.
+
+Back propagation is recursively
+and hence efficiently
+
+applying the chain rule
+along the computation graph,
+
+with this key step that
+downstream gradient equals
+
+upstream gradient
+times local gradient.
+
+And so for calculating
+with neural nets,
+
+we do the forward
+pass to work out
+
+values with current parameters,
+then run back propagation
+
+to work out the
+gradient of the loss,
+
+currently computed loss with
+respect to those parameters.
+
+Now, to some extent, with
+modern deep learning frameworks,
+
+you don't actually have to know
+how to do any of this, right?
+
+It's the same as you
+don't have to know
+
+how to implement a C compiler.
+
+You can just write C code and
+say gcc, and it'll compile it
+
+and it'll run the
+right stuff for you.
+
+And that's the kind
+of functionality
+
+you get from the
+PyTorch framework.
+
+So, do come along to the
+PyTorch tutorial this Friday
+
+and get a sense
+about how easy it
+
+is to write neural networks
+using a framework like PyTorch
+
+or TensorFlow.
+
+And it's so easy,
+that's why high school
+
+students across
+the nation are now
+
+doing their science projects
+training deep learning systems.
+
+Because you don't actually
+have to understand
+
+very much to bung a few neural
+network layers together and set
+
+it computing on some data.
+
+But we hope in this
+class that you actually
+
+are also learning how these
+things are implemented.
+
+So you have a deeper
+understanding than that.
+
+And it turns out that
+sometimes you need
+
+to have a deeper understanding.
+
+So, back propagation doesn't
+always work perfectly.
+
+And so understanding
+what it's really doing
+
+can be crucial to
+debugging things.
+
+And so we'll actually
+see an example of that
+
+fairly soon when
+we start looking
+
+at recurrent models and some
+of the problems that they have,
+
+which will require us to think
+a bit more deeply about what's
+
+happening in our
+gradient computations.
+
+OK.
+
+That's it for today.
+
+
+

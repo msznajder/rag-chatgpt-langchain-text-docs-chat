@@ -1,0 +1,360 @@
+CS224n: Natural Language Processing with Deep Learning
+Stanford / Winter 2021
+
+Natural language processing (NLP) is a crucial part of artificial intelligence (AI), modeling how people share information. In recent years, deep learning approaches have obtained very high performance on many NLP tasks. In this course, students gain a thorough introduction to cutting-edge neural networks for NLP.
+
+Instructors:
+Chris Manning
+John Hewitt
+
+TA:
+Course Coordinator
+Amelie Byun
+Teaching Assistants
+Daniel Do
+Rachel Gardner
+Davide Giovanardi
+Alvin Hou
+Prerna Khullar
+Gita Krishna
+Megan Leszczynski
+Elissa Li
+Mandy Lu
+Shikhar Murty
+Akshay Smit
+Dilara Soylu
+Angelica Sun
+Chris Waites
+Andrew Wang
+Rui Wang
+Yuyan Wang
+Zihan Wang
+Lingjue Xie
+Rui Yan
+Anna Yang
+Lauren Zhu
+Logistics
+
+Lectures: are on Tuesday/Thursday 4:30-5:50pm Pacific Time (Remote, Zoom link is posted on Canvas).
+Lecture videos for enrolled students: are posted on Canvas (requires login) shortly after each lecture ends. Unfortunately, it is not possible to make these videos viewable by non-enrolled students.
+Publicly available lecture videos and versions of the course: Complete videos from the 2019 edition are available (free!) on the Stanford Online Hub and on the CS224N YouTube channel. Anyone is welcome to enroll in XCS224N: Natural Language Processing with Deep Learning, the Stanford Artificial Intelligence Professional Program version of this course, throughout the year (medium fee, community TAs and certificate). You can enroll in CS224N via Stanford online in the (northern hemisphere) Autumn to do the course in the Winter (high cost, gives Stanford credit). The lecture slides and assignments are updated online each year as the course progresses. We are happy for anyone to use these resources, but we are happy to get acknowledgements.
+Office hours: We've switched to using Nooks for office hours. Information here.
+Contact: Students should ask all course-related questions in the Ed forum (not Piazza), where you will also find announcements. For external enquiries, emergencies, or personal matters that you don't wish to put in a private Ed post, you can email us at cs224n-win2021-staff@lists.stanford.edu.
+
+Content
+What is this course about?
+
+Natural language processing (NLP) or computational linguistics is one of the most important technologies of the information age. Applications of NLP are everywhere because people communicate almost everything in language: web search, advertising, emails, customer service, language translation, virtual agents, medical reports, etc. In recent years, deep learning (or neural network) approaches have obtained very high performance across many different NLP tasks, using single end-to-end neural models that do not require traditional, task-specific feature engineering. In this course, students will gain a thorough introduction to cutting-edge research in Deep Learning for NLP. Through lectures, assignments and a final project, students will learn the necessary skills to design, implement, and understand their own neural network models.
+Previous offerings
+
+This course was formed in 2017 as a merger of the earlier CS224n (Natural Language Processing) and CS224d (Natural Language Processing with Deep Learning) courses. Below you can find archived websites and student project reports.
+CS224n Websites: Winter 2020 / Winter 2019 / Winter 2018 / Winter 2017 / Autumn 2015 / Autumn 2014 / Autumn 2013 / Autumn 2012 / Autumn 2011 / Winter 2011 / Spring 2010 / Spring 2009 / Spring 2008 / Spring 2007 / Spring 2006 / Spring 2005 / Spring 2004 / Spring 2003 / Spring 2002 / Spring 2000
+CS224n Lecture Videos: Winter 2019 / Winter 2017
+CS224n Reports: Winter 2020 / Winter 2019 / Winter 2018 / Winter 2017 / Autumn 2015 and earlier
+CS224d Reports: Spring 2016 / Spring 2015
+Prerequisites
+
+Proficiency in Python
+
+All class assignments will be in Python (using NumPy and PyTorch). If you need to remind yourself of Python, or you're not very familiar with NumPy, you can come to the Python review session in week 1 (listed in the schedule). If you have a lot of programming experience but in a different language (e.g. C/C++/Matlab/Java/Javascript), you will probably be fine.
+College Calculus, Linear Algebra (e.g. MATH 51, CME 100)
+
+You should be comfortable taking (multivariable) derivatives and understanding matrix/vector notation and operations.
+Basic Probability and Statistics (e.g. CS 109 or equivalent)
+
+You should know basics of probabilities, gaussian distributions, mean, standard deviation, etc.
+Foundations of Machine Learning (e.g. CS221, CS229, or CS230)
+
+We will be formulating cost functions, taking derivatives and performing optimization with gradient descent. If you already have basic machine learning and/or deep learning knowledge, the course will be easier; however it is possible to take CS224n without it. There are many introductions to ML, in webpage, book, and video form. One approachable introduction is Hal Daumé’s in-progress A Course in Machine Learning. Reading the first 5 chapters of that book would be good background. Knowing the first 7 chapters would be even better!
+
+Reference Texts
+
+The following texts are useful, but none are required. All of them can be read free online.
+
+Dan Jurafsky and James H. Martin. Speech and Language Processing (3rd ed. draft)
+Jacob Eisenstein. Natural Language Processing
+Yoav Goldberg. A Primer on Neural Network Models for Natural Language Processing
+Ian Goodfellow, Yoshua Bengio, and Aaron Courville. Deep Learning
+Delip Rao and Brian McMahan. Natural Language Processing with PyTorch (requires Stanford login).
+
+If you have no background in neural networks but would like to take the course anyway, you might well find one of these books helpful to give you more background:
+
+Michael A. Nielsen. Neural Networks and Deep Learning
+Eugene Charniak. Introduction to Deep Learning
+
+
+Coursework
+Assignments (54%)
+
+There are five weekly assignments, which will improve both your theoretical understanding and your practical skills. All assignments contain both written questions and programming parts. In office hours, TAs may look at students’ code for assignments 1, 2 and 3 but not for assignments 4 and 5.
+
+Credit:
+    Assignment 1 (6%): Introduction to word vectors
+    Assignment 2 (12%): Derivatives and implementation of word2vec algorithm
+    Assignment 3 (12%): Dependency parsing and neural network foundations
+    Assignment 4 (12%): Neural Machine Translation with sequence-to-sequence, attention, and subwords
+    Assignment 5 (12%): Self-supervised learning and fine-tuning with Transformers
+Deadlines: All assignments are due on either a Tuesday or a Thursday before class (i.e. before 4:30pm). All deadlines are listed in the schedule.
+Submission: Assignments are submitted via Gradescope. If you need to sign up for a Gradescope account, please use your @stanford.edu email address. Further instructions are given in each assignment handout. Do not email us your assignments.
+Late start: If the result gives you a higher grade, we will not use your assignment 1 score, and we will give you an assignment grade based on counting each of assignments 2–5 at 13.5%.
+Collaboration: Study groups are allowed, but students must understand and complete their own assignments, and hand in one assignment per student. If you worked in a group, please put the names of the members of your study group at the top of your assignment. Please ask if you have any questions about the collaboration policy.
+Honor Code: We expect students to not look at solutions or implementations online. Like all other classes at Stanford, we take the student Honor Code seriously.
+
+Final Project (43%)
+
+The Final Project offers you the chance to apply your newly acquired skills towards an in-depth application. Students have two options: the Default Final Project (in which students tackle a predefined task, namely textual Question Answering) or a Custom Final Project (in which students choose their own project involving human language and deep learning). Examples of both can be seen on last year's website.
+Important information
+
+Credit: For both default and custom projects, credit for the final project is broken down as follows:
+    Project proposal (5%) [instructions]
+    Project milestone (5%) [instructions]
+    Project summary image and paragraph (3%) [instructions]
+    Project report (30%) [instructions]
+Deadlines: The project proposal, milestone and report are all due at 4:30pm. All deadlines are listed in the schedule.
+Default Final Project [handout (IID SQuAD track)] [handout (Robust QA track)] [lecture slides]: In this project, students explore deep learning solutions to the SQuAD (Stanford Question Asking Dataset) challenge. This year's project is similar to last year's, on SQuAD 2.0 with baseline code in PyTorch.
+Project advice [lecture slides] [lecture notes]: The Practical Tips for Final Projects lecture provides guidance for choosing and planning your project. To get project advice from staff members, first look at each staff member's areas of expertise on the office hours page. This should help you find a staff member who is knowledgable about your project area.
+
+Practicalities
+
+Team size: Students may do final projects solo, or in teams of up to 3 people. We strongly recommend you do the final project in a team. Larger teams are expected to do correspondingly larger projects, and you should only form a 3-person team if you are planning to do an ambitious project where every team member will have a significant contribution.
+Contribution: In the final report we ask for a statement of what each team member contributed to the project. Team members will typically get the same grade, but we may differentiate in extreme cases of unequal contribution. You can contact us in confidence in the event of unequal contribution.
+External collaborators: You can work on a project that has external (non CS224n student) collaborators, but you must make it clear in your final report which parts of the project were your work.
+Sharing projects: You can share a single project between CS224n and another class, but we expect the project to be accordingly bigger, and you must declare that you are sharing the project in your project proposal.
+Mentors: Every custom project team has a mentor, who gives feedback and advice during the project. Default project teams do not have mentors. A project may have an external (i.e., not course staff) mentor; otherwise, we will assign a CS224n staff mentor to custom project teams after project proposals.
+Computing resources: All teams will receive credits to use the cloud computing service Azure.
+Using external resources: The following guidelines apply to all projects (though the default project has some more specific rules, provided in the Honor Code section of the handout (IID SQuAD track) and handout (Robust QA track)):
+    You can use any deep learning framework you like (PyTorch, TensorFlow, etc.)
+    More generally, you may use any existing code, libraries, etc. and consult and any papers, books, online references, etc. for your project. However, you must cite your sources in your writeup and clearly indicate which parts of the project are your contribution and which parts were implemented by others.
+    Under no circumstances may you look at another CS224n group’s code, or incorporate their code into your project.
+
+Participation (3%)
+
+We appreciate everyone being actively involved in the class! There are several ways of earning participation credit, which is capped at 3%:
+
+Attending guest speakers' lectures:
+    In the second half of the class, we have three invited speakers. Our guest speakers make a significant effort to come lecture for us, so (both to show our appreciation and to continue attracting interesting speakers) we do not want them lecturing to a largely empty room. As such, we encourage students to attend these virutal lectures live, and participate in Q&A.
+    All students get 0.5% per speaker (1.5% total) by writing a reaction paragraph based watching the talk; details will be provided. Students do not need to attend lecture live to write these reaction paragraphs; they may watch asynchronously.
+Completing feedback surveys: We will send out two feedback surveys (mid-quarter and end-of-quarter) to help us understand how the course is going, and how we can improve. Each of the two surveys are worth 0.5%.
+Ed participation: The top ~20 contributors to Ed will get 3%; others will get credit in proportion to the participation of the ~20th person.
+Karma point: Any other act that improves the class, like helping out another student in Nooks, which a CS224n TA or instructor notices and deems worthy: 1%
+
+Late Days
+
+Each student has 6 late days to use. A late day extends the deadline 24 hours. You can use up to 3 late days per assignment (including all five assignments, project proposal, project milestone, project final report and project summary).
+Teams can share late days between members. For example, a group of three people must have at least six late days between them to extend the deadline by two days. If any late days are being shared, this must be clearly marked at the beginning of the report, and fill out the form linked in this Ed post.
+Once you have used all 6 late days, the penalty is 1% off the final course grade for each additional late day.
+
+Regrade Requests
+
+If you feel you deserved a better grade on an assignment, you may submit a regrade request on Gradescope within 3 days after the grades are released. Your request should briefly summarize why you feel the original grade was unfair. Your TA will reevaluate your assignment as soon as possible, and then issue a decision. If you are still not happy, you can ask for your assignment to be regraded by an instructor.
+Credit/No credit enrollment
+
+If you take the class credit/no credit then you are graded in the same way as those registered for a letter grade. The only difference is that, providing you reach a C- standard in your work, it will simply be graded as CR.
+Auditing the course
+
+In general we are happy to have auditors if they are a member of the Stanford community (registered student, official visitor, staff, or faculty). If you want to actually master the material of the class, we very strongly recommend that auditors do all the assignments. However, due to high enrollment, we cannot grade the work of any students who are not officially enrolled in the class.
+Cloud GPU computing
+
+We thank Microsoft Azure for sponsoring cloud GPU compute for students in this class.
+All students welcome
+
+We are committed to doing what we can to work for equity and to create an inclusive learning environment that actively values the diversity of backgrounds, identities, and experiences of everyone in CS224N. We also know that we will sometimes make missteps. If you notice some way that we could do better, we hope that you will let someone in the course staff know about it.
+Well-Being and Mental Health
+
+The last twelve months have been difficult for everyone. We’re here for you to try to help you get through a couple more quarters of the pandemic. If you are experiencing personal, academic, or relationship problems and would like to talk to someone with training and experience, reach out to the Counseling and Psychological Services (CAPS) on campus. CAPS is the university’s counseling center dedicated to student mental health and wellbeing. Phone assessment appointments can be made at CAPS by calling 650-723-3785, or by accessing the VadenPatient portal through the Vaden website.
+Students with Documented Disabilities
+
+If you need an academic accommodation based on a disability, you should initiate the request with the Office of Accessible Education (OAE). The OAE will evaluate the request, recommend accommodations, and prepare a letter for faculty. Students should contact the OAE as soon as possible and at any rate in advance of assignment deadlines, since timely notice is needed to coordinate accommodations. Students should also send your accommodation letter to instructors as soon as possible.
+Sexual violence
+
+Academic accommodations are available for students who have experienced or are recovering from sexual violence. If you would like to talk to a confidential resource, you can schedule a meeting with the Confidential Support Team or call their 24/7 hotline at: 650-725-9955. Counseling and Psychological Services also offers confidential counseling services. Non-confidential resources include the Title IX Office, for investigation and accommodations, and the SARA Office, for healing programs. Students can also speak directly with the teaching staff to arrange accommodations. Note that university employees – including professors and TAs – are required to report what they know about incidents of sexual or relationship violence, stalking and sexual harassment to the Title IX Office. Students can learn more at https://vaden.stanford.edu/sexual-assault.
+
+Schedule
+
+Updated lecture slides will be posted here shortly before each lecture. Other links contain last year's slides, which are mostly similar.
+
+Lecture notes will be uploaded a few days after most lectures. The notes (which cover approximately the first half of the course content) give supplementary detail beyond the lectures.
+Date 	Description 	Course Materials 	Events 	Deadlines
+Tue Jan 12 	Word Vectors
+[slides] [notes]
+
+Gensim word vectors example:
+[code] [preview] 	Suggested Readings:
+
+Efficient Estimation of Word Representations in Vector Space (original word2vec paper)
+Distributed Representations of Words and Phrases and their Compositionality (negative sampling paper)
+
+Assignment 1 out
+[code]
+[preview] 	
+Thu Jan 14 	Word Vectors 2 and Word Window Classification
+[slides] [notes] 	Suggested Readings:
+
+GloVe: Global Vectors for Word Representation (original GloVe paper)
+Improving Distributional Similarity with Lessons Learned from Word Embeddings
+Evaluation methods for unsupervised word embeddings
+
+Additional Readings:
+
+A Latent Variable Model Approach to PMI-based Word Embeddings
+Linear Algebraic Structure of Word Senses, with Applications to Polysemy
+On the Dimensionality of Word Embedding
+
+	
+Fri Jan 15 	Python Review Session
+[code] [preview] 	10:00am - 11:20am 		
+Tue Jan 19 	Backprop and Neural Networks
+[slides] [notes] 	Suggested Readings:
+
+matrix calculus notes
+Review of differential calculus
+CS231n notes on network architectures
+CS231n notes on backprop
+Derivatives, Backpropagation, and Vectorization
+Learning Representations by Backpropagating Errors (seminal Rumelhart et al. backpropagation paper)
+
+Additional Readings:
+
+Yes you should understand backprop
+Natural Language Processing (Almost) from Scratch
+
+Assignment 2 out
+[code] [handout] 	Assignment 1 due
+Thu Jan 21 	Dependency Parsing
+[slides] [notes]
+[slides (annotated)] 	Suggested Readings:
+
+Incrementality in Deterministic Dependency Parsing
+A Fast and Accurate Dependency Parser using Neural Networks
+Dependency Parsing
+Globally Normalized Transition-Based Neural Networks
+Universal Stanford Dependencies: A cross-linguistic typology
+Universal Dependencies website
+
+	
+Fri Jan 22 	PyTorch Tutorial Session
+[colab notebook] [preview]
+[jupyter notebook] 	10:00am - 11:20am 		
+Tue Jan 26 	Recurrent Neural Networks and Language Models
+[slides] [notes (lectures 5 and 6)] 	Suggested Readings:
+
+N-gram Language Models (textbook chapter)
+The Unreasonable Effectiveness of Recurrent Neural Networks (blog post overview)
+Sequence Modeling: Recurrent and Recursive Neural Nets (Sections 10.1 and 10.2)
+On Chomsky and the Two Cultures of Statistical Learning 
+
+Assignment 3 out
+[code] [handout] 	Assignment 2 due
+Thu Jan 28 	Vanishing Gradients, Fancy RNNs, Seq2Seq
+[slides] [notes (lectures 5 and 6)] 	Suggested Readings:
+
+Sequence Modeling: Recurrent and Recursive Neural Nets (Sections 10.3, 10.5, 10.7-10.12)
+Learning long-term dependencies with gradient descent is difficult (one of the original vanishing gradient papers)
+On the difficulty of training Recurrent Neural Networks (proof of vanishing gradient problem)
+Vanishing Gradients Jupyter Notebook (demo for feedforward networks)
+Understanding LSTM Networks (blog post overview)
+
+	
+Tue Feb 2 	Machine Translation, Attention, Subword Models
+[slides] [notes] 	Suggested Readings:
+
+Statistical Machine Translation slides, CS224n 2015 (lectures 2/3/4)
+Statistical Machine Translation (book by Philipp Koehn)
+BLEU (original paper)
+Sequence to Sequence Learning with Neural Networks (original seq2seq NMT paper)
+Sequence Transduction with Recurrent Neural Networks (early seq2seq speech recognition paper)
+Neural Machine Translation by Jointly Learning to Align and Translate (original seq2seq+attention paper)
+Attention and Augmented Recurrent Neural Networks (blog post overview)
+Massive Exploration of Neural Machine Translation Architectures (practical advice for hyperparameter choices)
+Achieving Open Vocabulary Neural Machine Translation with Hybrid Word-Character Models
+Revisiting Character-Based Neural Machine Translation with Capacity and Compression
+
+Assignment 4 out
+[code] [handout] [Azure Guide] [Practical Guide to VMs] 	Assignment 3 due
+Thu Feb 4 	Final Projects: Custom and Default; Practical Tips
+[slides] [notes] 	Suggested Readings:
+
+Practical Methodology (Deep Learning book chapter)
+
+Project Proposal out
+[instructions]
+
+Default Final Project out
+[handout (IID SQuAD track)]
+[handout (Robust QA track)] 	
+Tue Feb 9 	Transformers (lecture by John Hewitt)
+[slides] [notes] 	Suggested Readings:
+
+Project Handout (IID SQuAD track)
+Project Handout (Robust QA track)
+Attention Is All You Need
+The Illustrated Transformer
+Transformer (Google AI blog post)
+Layer Normalization
+Image Transformer
+Music Transformer: Generating music with long-term structure
+
+	
+Thu Feb 11 	More about Transformers and Pretraining (lecture by John Hewitt)
+[slides] [notes] 	Suggested Readings:
+
+BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
+Contextual Word Representations: A Contextual Introduction
+The Illustrated BERT, ELMo, and co.
+
+Assignment 5 out
+[code] [handout] 	Assignment 4 due
+Tue Feb 16 	Question Answering (guest lecture by Danqi Chen)
+[slides] 	Suggested Readings:
+
+SQuAD: 100,000+ Questions for Machine Comprehension of Text
+Bidirectional Attention Flow for Machine Comprehension
+Reading Wikipedia to Answer Open-Domain Questions
+Latent Retrieval for Weakly Supervised Open Domain Question Answering
+Dense Passage Retrieval for Open-Domain Question Answering
+Learning Dense Representations of Phrases at Scale
+
+	Project Proposal due
+Thu Feb 18 	Natural Language Generation (lecture by Antoine Bosselut)
+[slides] 	Suggested readings:
+
+The Curious Case of Neural Text Degeneration
+Get To The Point: Summarization with Pointer-Generator Networks
+Hierarchical Neural Story Generation
+How NOT To Evaluate Your Dialogue System
+
+	
+Fri Feb 19 			Project Milestone out [instructions] 	Assignment 5 due
+Tue Feb 23 	Reference in Language and Coreference Resolution
+[slides] 	Suggested readings:
+
+Coreference Resolution chapter of Jurafsky and Martin
+End-to-end Neural Coreference Resolution.
+
+	
+Thu Feb 25 	T5 and large language models: The good, the bad, and the ugly (guest lecture by Colin Raffel)
+[slides] 	Suggested readings:
+
+Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer
+
+	
+Tue Mar 2 	Integrating knowledge in language models (lecture by Megan Leszczynski)
+[slides] 	Suggested readings:
+
+ERNIE: Enhanced Language Representation with Informative Entities
+Barack’s Wife Hillary: Using Knowledge Graphs for Fact-Aware Language Modeling
+Pretrained Encyclopedia: Weakly Supervised Knowledge-Pretrained Language Model
+Language Models as Knowledge Bases?
+
+	Project Milestone due
+Thu Mar 4 	Social & Ethical Considerations in NLP Systems (guest lecture by Yulia Tsvetkov)
+[slides] 			
+Tue Mar 9 	Model Analysis and Explanation (lecture by John Hewitt)
+[slides] 			
+Thu Mar 11 	Future of NLP + Deep Learning (lecture by Shikhar Murty)
+[slides] 			
+Fri Mar 12 			Project Summary Image and Paragraph out [instructions] 	
+Tue Mar 16 	Ask Me Anything / Final Project Assistance 			Project due [instructions]
+Thu Mar 18 	Final Project Emergency Assistance 			
+Fri Mar 19 				Project Summary Image and Paragraph due
+
